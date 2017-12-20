@@ -37,8 +37,8 @@ The following is a list of runtime errors that the program will detect.
 	- Test cases: empty-lam-1.scm, empty-lam-2.scm
 
 
-     Primitives
-====================
+  Primitives
+==============
 
 The following is a list of primitive operations, how to use them, their return values, and example usage. Note: this list is not comprehensive, but does cover every prim I personally added to the language, as well as many other important prims. The prims that I added myself are specifically marked as such.
 
