@@ -1,4 +1,5 @@
-About the Author
+ About the Author
+===================
 
 Benjamin Cooper is a student at the University of Maryland, College Park, studying mathematics and computer science, and graduating in December of 2018.
 
@@ -9,7 +10,6 @@ I, Benjamin Cooper, pledge on my honor that I have not given or received any una
 
 This is a compiler for a subset of the Scheme coding language. Written, technically over the course of 15 weeks, but more realistically over the past 48 hours, this program will compile .scm files into a runnable binary. To run programs in this language, write a valid program, with the extension .scm (see a guide for how to write code in Scheme), place it in the folder tests/final_starter_tests/, and run the command 'racket tests.rkt #{program name, without the .scm}'. This will confirm that the compiler is working properly for that particular program. To see the output of your program run './bin'. You can also run programs by similarly adding them to the tests directory, entering the racket top-level (through DrRacket) of tests.rkt, and entering the command (eval-llvm (gen-llvm (get-code "test-name")). Note: many of the test cases provided are intended to fail, as they show examples of run-time errors.
 
-====================
    Runtime errors
 ====================
 
@@ -36,7 +36,6 @@ The following is a list of runtime errors that the program will detect.
 	- Expected output: library run-time error: lambda: bad syntax, missing body in: #{problematic code}
 	- Test cases: empty-lam-1.scm, empty-lam-2.scm
 
-====================
      Primitives
 ====================
 
