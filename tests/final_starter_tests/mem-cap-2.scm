@@ -1,0 +1,1 @@
+(letrec ([loop (lambda () (make-vector 50000000 0) (loop))]) (loop))
