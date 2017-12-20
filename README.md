@@ -36,6 +36,7 @@ The following is a list of runtime errors that the program will detect.
 	- Expected output: library run-time error: lambda: bad syntax, missing body in: #{problematic code}
 	- Test cases: empty-lam-1.scm, empty-lam-2.scm
 
+
      Primitives
 ====================
 
