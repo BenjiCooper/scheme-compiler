@@ -6,6 +6,7 @@
 #include "stdint.h"
 #include "string.h"
 
+#define FLOAT_TAG 0
 #define CLO_TAG 5
 #define CONS_TAG 1
 #define INT_TAG 2
@@ -38,6 +39,8 @@
     if(((u64)(v)) != (val))     \
         fatal_err(msg);
 
+#define DECODE_FLOAT(v) ((float)((unsigned float)(((v)&(7ULL^MASK64)) >> 32)))
+#define ENCODE_FLOAT(v) ((((u64)((float)(v))) << 32) | FLOAT_TAG)
 
 #define DECODE_CLO(v) ((u64*)((v)&(7ULL^MASK64)))
 #define ENCODE_CLO(v) (((u64)(v)) | CLO_TAG)
@@ -175,6 +178,11 @@ u64 expect_other(u64 v, u64* rest)
 
 /////// CONSTANTS
     
+
+u64 const_init_flonum(s64 f)
+{
+    return ENCODE_FLOAT((float)f);
+}
     
 u64 const_init_int(s64 i)
 {
@@ -245,6 +253,10 @@ u64 prim_print_aux(u64 v)
         prim_print_aux(p[1]);
         printf(")");
     }
+    else if ((v&7) == FLOAT_TAG)
+    {
+        printf("%f", (float)(v>>32));
+    }
     else if ((v&7) == INT_TAG)
     {
         printf("%d", (int)((s32)(v >> 32)));
@@ -295,6 +307,10 @@ u64 prim_print(u64 v)
         printf(" . ");
         prim_print_aux(p[1]);
         printf(")");
+    }
+    else if ((v&7) == FLOAT_TAG)
+    {
+        printf("%f", (float)(v>>32));
     }
     else if ((v&7) == INT_TAG)
     {
@@ -534,9 +550,9 @@ u64 prim_substring(u64 s, u64 a, u64 b)
 
 u64 prim_string_45set(u64 s, u64 k, u64 c)
 {
-    ASSERT_TAG(s, STR_TAG, "(string-set! s k c); s is not a string")
-    ASSERT_TAG(k, INT_TAG, "(string-set! s k c); k is not an integer")
-    ASSERT_TAG(c, CHAR_TAG, "(string-set! s k c); c is not a char")
+    ASSERT_TAG(s, STR_TAG, "(string-set s k c); s is not a string")
+    ASSERT_TAG(k, INT_TAG, "(string-set s k c); k is not an integer")
+    ASSERT_TAG(c, CHAR_TAG, "(string-set s k c); c is not a char")
 
     char *str = DECODE_STR(s);
     char ch = DECODE_CHAR(c);
@@ -552,6 +568,28 @@ u64 prim_string_45set(u64 s, u64 k, u64 c)
     strcpy(new_s, str);
     new_s[i] = ch;
     return ENCODE_STR(new_s);
+}
+
+u64 prim_make_45string(u64 k, u64 c)
+{
+    ASSERT_TAG(k, INT_TAG, "(make-string k c); k is not an integer")
+    ASSERT_TAG(c, CHAR_TAG, "(make-string k c); c is not a char")
+
+    int i = DECODE_INT(k);
+    char ch = DECODE_CHAR(c);
+    char *ret_str = (char *)malloc(i+1);
+    
+    mem_count += i+1;
+    if (mem_count > MAX_MEM)
+        fatal_err("EXCEEDED MAXIMUM AMOUNT OF MEMORY");
+
+    for(i = 0; i < DECODE_INT(k); i++){
+        ret_str[i] = ch;
+    }
+
+    ret_str[DECODE_INT(k)] = '\0';
+
+    return ENCODE_STR(ret_str);
 }
 
 u64 prim_ascii(u64 c)
@@ -791,7 +829,22 @@ u64 prim__47(u64 a, u64 b) // /
 
     return ENCODE_INT(DECODE_INT(a) / DECODE_INT(b));
 }
-    
+  
+u64 prim__94(u64 n, u64 k)
+{
+    ASSERT_TAG(n, INT_TAG, "(prim ^ n k); n is not an integer")
+    ASSERT_TAG(k, INT_TAG, "(prim ^ n k); k is not an integer")
+    if (DECODE_INT(k) < 0)
+        fatal_err("negative exponentiation is not yet supported");
+
+    int i, a = 1;
+    for (i = 0; i < DECODE_INT(k); i++){
+        a *= DECODE_INT(n);
+    }
+
+    return ENCODE_INT(a);
+}
+
 u64 prim__61(u64 a, u64 b)  // =
 {
     ASSERT_TAG(a, INT_TAG, "(prim = a b); a is not an integer")
@@ -833,8 +886,6 @@ u64 prim_not(u64 a)
         return V_FALSE;
 }
 GEN_EXPECT1ARGLIST(applyprim_not, prim_not)
-
-
 
 }
 

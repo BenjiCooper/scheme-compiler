@@ -40,9 +40,9 @@
         clang++-path-submit-server
         "clang++")))
 
-(define prims-list '(= > < <= >= + - * / ; README added
+(define prims-list '(= > < <= >= + - * / ^ ; README added
                        modulo system ascii ; Made by me
-                       string-length string-append string-ref substring string->list string string-set ; Made by me
+                       string-length string-append string-ref substring string->list string string-set make-string ; Made by me
                        hash hash-ref hash-set! 
                        hash-set hash-count hash-keys hash-has-key? hash?
                        cons? null? cons car cdr list first second third fourth fifth
@@ -89,6 +89,7 @@
     [(? symbol?) #t]
     [(? boolean?) #t]
     [(? char?) #t]
+    [(? flonum?) #t]
     [else (pretty-print `(bad-datum ,d)) #f]))
 
 

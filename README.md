@@ -104,6 +104,12 @@ I) Numerical calculations
 	- returns: remainder upon division of b by a (modular arithmetic)
 	- example: (modulo 5 3) -> 2
 
+	11) ^ (written by me)
+	- usage: (^ n k)
+	- args: two integers
+	- returns: n to the power of k
+	- example: (^ 3 2) -> 9
+
 II) List functions
 	
 	1) cons
@@ -203,6 +209,13 @@ III) String functions (all of these were added by me)
 	- usage: (string-set s k c)
 	- args: 1 string, 1 integer, 1 character
 	- returns: the given string with the character at position i set to c
+	- example: (string-set "CMSC 466" 0 #\A) -> "AMSC 466"
+
+	8) make-string
+	- usage: (make-string n c)
+	- args: an integer and a character
+	- returns the string made of the character c repeated n times
+	- example: (make-string 4 #\C) -> "CCCC"
 
 IV) Vector functions
 	

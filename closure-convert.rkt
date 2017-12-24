@@ -421,6 +421,12 @@
          "  %" (s-> x) " = call i64 @const_init_int(i64 " (number->string dat) ")"
          "quoted int")
         (e->llvm e0))]
+      [`(let ([,x ',(? flonum? dat)]) ,e0)
+       (string-append
+        (comment-line
+         "  %" (s-> x) " = call i64 @const_init_flonum(i64 " (number->string dat) ")"
+         "quoted float")
+        (e->llvm e0))]
       [`(let ([,x ',(? char? dat)]) ,e0)
        (string-append
         (comment-line
