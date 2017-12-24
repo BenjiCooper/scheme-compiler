@@ -287,7 +287,14 @@ V) Miscellaneous
 
 
 
+  Planned Updates
+===================
 
+- Floating point values
+- Accessing command line arguments
+- Sine, cosine, tangent, logarithms, square roots
+- Integrals, derivatives, approximate zeroes of functions
+- Ability to install the compiler, instead of running it out of a particular directory.
 
 
 
