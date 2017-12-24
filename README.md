@@ -10,15 +10,6 @@ I, Benjamin Cooper, pledge on my honor that I have not given or received any una
 
 This is a compiler for a subset of the Scheme coding language. To compile a program, run the command "racket compile-scheme.rkt /path/to/file desired-outfile-name". The compiled binary will appear in the local directory, and can be run as any normal executable. The file tests.rkt exists to test the compiler, and ensure it works correctly.
 
-  Planned Updates
-===================
-
-- Floating point values
-- Accessing command line arguments
-- Sine, cosine, tangent, logarithms, square roots
-- Integrals, derivatives, approximate zeroes of functions
-- Ability to install the compiler, instead of running it out of a particular directory.
-
   Requirements to run
 =======================
 To run this compiler you must have racket and clang installed.
