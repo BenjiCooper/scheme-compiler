@@ -8,7 +8,20 @@ I, Benjamin Cooper, pledge on my honor that I have not given or received any una
   SCHEME compiler
 ===================
 
-This is a compiler for a subset of the Scheme coding language. Written, technically over the course of 15 weeks, but more realistically over the past 48 hours, this program will compile .scm files into a runnable binary. To run programs in this language, write a valid program, with the extension .scm (see a guide for how to write code in Scheme), place it in the folder tests/final_starter_tests/, and run the command 'racket tests.rkt #{program name, without the .scm}'. This will confirm that the compiler is working properly for that particular program. To see the output of your program run './bin'. You can also run programs by similarly adding them to the tests directory, entering the racket top-level (through DrRacket) of tests.rkt, and entering the command (eval-llvm (gen-llvm (get-code "test-name")). Note: many of the test cases provided are intended to fail, as they show examples of run-time errors.
+This is a compiler for a subset of the Scheme coding language. To compile a program, run the command "racket compile-scheme.rkt /path/to/file desired-outfile-name". The compiled binary will appear in the local directory, and can be run as any normal executable. The file tests.rkt exists to test the compiler, and ensure it works correctly.
+
+  Requirements to run
+=======================
+To run this compiler you must have racket and clang installed.
+
+  Planned Updates
+===================
+
+- Floating point values
+- Accessing command line arguments
+- Sine, cosine, tangent, logarithms, square roots
+- Integrals, derivatives, approximate zeroes of functions
+- Ability to install the compiler, instead of running it out of a particular directory.
 
    Runtime errors
 ====================
