@@ -24,7 +24,7 @@ To run this compiler you must have racket and clang installed.
 - Ability to install the compiler, instead of running it out of a particular directory.
 
   Runtime errors
-====================
+==================
 
 The following is a list of runtime errors that the program will detect.
 
