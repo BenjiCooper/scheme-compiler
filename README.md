@@ -3,8 +3,6 @@
 
 Benjamin Cooper is a student at the University of Maryland, College Park, studying mathematics and computer science, and graduating in December of 2018.
 
-I, Benjamin Cooper, pledge on my honor that I have not given or received any unauthorized assistance on this assignment.
-
   SCHEME compiler
 ===================
 
