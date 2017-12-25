@@ -293,9 +293,6 @@ V) Miscellaneous
 - Sine, cosine, tangent, logarithms, square roots
 - Integrals, derivatives, approximate zeroes of functions
 - Ability to install the compiler, instead of running it out of a particular directory.
-
-
-
-
-
+- Mutable hash tables and hash sets
+- Linking files using (require)
 
