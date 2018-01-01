@@ -23,7 +23,8 @@
          test-cps-convert
          proc-exp?
          test-closure-convert
-         test-proc->llvm)
+         test-proc->llvm
+         list->str)
 
 
 (define project-path (current-directory))
@@ -43,6 +44,7 @@
 (define prims-list '(= > < <= >= + - * / ^ ; README added
                        modulo system ascii ; Made by me
                        string-length string-append string-ref substring string->list string string-set make-string ; Made by me
+                       make-thread thread-start thread-kill thread-join
                        hash hash-ref hash-set! 
                        hash-set hash-count hash-keys hash-has-key? hash?
                        cons? null? cons car cdr list first second third fourth fifth
@@ -50,7 +52,7 @@
                        vector? vector make-vector vector-ref vector-set! vector-length
                        set set->list list->set set-add set-union set-count set-first set-rest set-remove
                        list? void? promise? procedure? number? integer? char?
-                       error void print display write exit halt throw
+                       error void print println display write exit halt throw
                        eq? eqv? equal? not))
 (define ok-set (list->set (string->list "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$")))
 (define (c-name s)
@@ -211,7 +213,16 @@
                          val1 val2))
         #f)))
 
-
+(define (make-string e)
+  (match e
+    [`(quote ,(? integer? e)) `(quote ,(number->string e))]
+    [`(quote ,(? char? e)) `(quote ,(string e))]
+    [`(quote ,(? string? e)) `(quote ,e)]
+    [(? string? e) `(quote ,e)]
+    [(? symbol? e) `(quote ,(symbol->string e))]
+    [`(quote ,(? list? e)) `(quote ,(list->str e))]
+    ['#t '"#t"]
+    ['#f '"#f"]))
 
 (define (ir-exp? e [env (set)]) 
   (define (var? x) (symbol? x))
@@ -285,6 +296,14 @@
        (T `(prim - (prim - ,e0 ,@(drop-right es 1)) ,(last es)))]
       [`(prim / ,e0 ,e1)
        `(prim / ,(T e0) ,(T e1))]
+      
+      [`(prim print ,e1 ,es ..1)
+       `(prim print ,(T `(prim string-append ,@(map make-string (cons e1 es)))))]
+
+      [`(prim println ,e1)
+       (T `(prim print ,e1 '"\n"))]
+      [`(prim println ,e1 ,es ..1)
+       (T `(prim print ,@(add-between (cons e1 es) '"\n") '"\n"))]
 
       [`(prim string-append)
        ''""]
@@ -717,7 +736,19 @@
                            ,@(map (match-lambda [`(proc (,xs ...) ,bdy) `(define ,xs ,bdy)]) procs)
                            (main)))))))))
 
-
                        
-
+(define (list->str e)
+  (match e
+    [(? list? e)
+     (string-append "(" (string-join (map list->str e)) ")")]
+    [(? symbol? e)
+     (symbol->string e)]
+    [(? integer? e)
+     (number->string e)]
+    [(? string? e)
+     e]
+    [(? char? e)
+     (string e)]
+    [#t "#t"]
+    [#f "#f"]))
 

@@ -266,18 +266,24 @@ V) Miscellaneous
 	- example: (halt "we're done here") -> '() and "we're done here" (printed to stdout)
 
 	3) print
-	- usage: (print s)
-	- args: a string
-	- returns: null, and prints s to stdout
-	- example: (print "hello world!\n") -> "hello world" printed to stdout
+	- usage: (print s1 ss ...)
+	- args: 1 or more values
+	- returns: null, and prints every input value to stdout
+	- example: (print "CMSC" "430" " is awesome") -> "CMSC430 is awesome" to sdout
 
-	4) system (written by me)
+	4) println
+	- usage: (println s1 ss ...)
+	- args: 1 or more values
+	- returns: null, and prints every value to stdout, separated by newlines
+	- example: (println "CMSC" "430") -> "CMSC\n430" to stdout
+
+	5) system (written by me)
 	- usage: (system s)
 	- args: 1 string
 	- returns: null, and executs the given system command
 	- example: (system "touch file.txt") -> '() and creates file.txt
 
-	5) ascii (written by me)
+	6) ascii (written by me)
 	- usage: (ascii c)
 	- args: 1 char
 	- returns: the ascii value of c, the same as (char->integer) from racket

@@ -113,10 +113,10 @@
        (if (null? es)
            `(throw '"let: bad syntax, missing body")
            `(let ,loop ,(map list xs (map T rhss)) ,(T `(begin . ,es))))]
-      [`(letrec* ([,xs ,es] ...)) `(throw '"letrec*: bad syntax, missing body")]
-      [`(letrec ([,xs ,es] ...)) `(throw '"letrec: bad syntax, missing body")]
-      [`(let* ([,xs ,es] ...)) `(throw '"let*: bad syntax, missing body")]
-      [`(let ([,xs ,es] ...)) `(throw '"let: bad syntax, missing body")]
+      [`(letrec* ([,xs ,es] ...)) `(throw ',(string-append "letrec*: bad syntax, missing body in " (list->str e)))]
+      [`(letrec ([,xs ,es] ...)) `(throw ',(string-append "letrec: bad syntax, missing body in " (list->str e)))]
+      [`(let* ([,xs ,es] ...)) `(throw ',(string-append "let*: bad syntax, missing body in " (list->str e)))]
+      [`(let ([,xs ,es] ...)) `(throw ',(string-append "let: bad syntax, missing body in " (list->str e)))]
       [`(cond [,guards ,ess ...] ...)
        `(cond ,@(map (lambda (guard es) (if (null? es) `(,(T guard)) `[,(T guard) ,(T `(begin . ,es))])) guards ess))]
       [`(case ,key [,guards ,ess ...] ...)
@@ -126,10 +126,7 @@
                ,(T `(begin . ,bodies)))]
       [`(lambda ,param ,es ...)
        (if (null? es)
-           `(throw ',(string-append "lambda: bad syntax, missing body in: (lambda " (if (symbol? param)
-                                                                                       (symbol->string param)
-                                                                                       (string-append "(" (string-join (map symbol->string param) " ") ")"))
-                                   ")"))
+           `(throw ',(string-append "lambda: bad syntax, missing body in: " (list->str e)))
            (match param
               [(? symbol? x)
                `(lambda ,x ,(T `(begin . ,es)))]

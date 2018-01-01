@@ -5,9 +5,10 @@
 #include "stdlib.h"
 #include "stdint.h"
 #include "string.h"
+#include "pthread.h"
 
-#define FLOAT_TAG 0
-#define CLO_TAG 5
+#define FLOAT_TAG 5
+#define CLO_TAG 0
 #define CONS_TAG 1
 #define INT_TAG 2
 #define STR_TAG 3
@@ -25,6 +26,8 @@
 #define V_TRUE 31  //24 +7
 #define V_FALSE 15 //8  +7
 #define V_NULL 0
+
+#define NUM_THREADS
 
 #define MAX_MEM 256000000
 
@@ -191,7 +194,7 @@ u64 const_init_int(s64 i)
 
 u64 const_init_char(s64 c)
 {
-    return ENCODE_CHAR((s8)c);
+    return ENCODE_CHAR((s32)c);
 }
 
 u64 const_init_void()
@@ -273,6 +276,18 @@ u64 prim_print_aux(u64 v)
     {   // needs to handle escaping to be correct
         printf("%s", DECODE_SYM(v));
     }
+    else if (v == V_VOID)
+    {
+        printf("(void)");
+    }
+    else if (v == V_TRUE)
+    {
+        printf("#t");
+    }
+    else if (v == V_FALSE)
+    {
+        printf("#f");
+    }
     else if ((v&7) == OTHER_TAG
              && (VECTOR_OTHERTAG == (((u64*)DECODE_OTHER(v))[0] & 7)))
     {
@@ -348,11 +363,11 @@ u64 prim_print(u64 v)
     }
     else if (v == V_TRUE)
     {
-        printf("%s", "#t");
+        printf("#t");
     }
     else if (v == V_FALSE)
     {
-        printf("%s", "#f");
+        printf("#f");
     }
     else
         printf("(print v); unrecognized value %llu", v);
@@ -614,6 +629,37 @@ u64 prim_ascii(u64 c)
     return ENCODE_OTHER(vec);
 }*/
 
+
+//// make-thread, thread-start, thread-kill, thread-join
+
+
+pthread_t pool[96];
+
+u64 prim_make_45thread()
+{
+    return ENCODE_INT(0);
+}
+
+void *perform_work(void *arg)
+{
+    int n = *((int *) arg);
+    printf("number: %d\n", n);
+    return NULL;
+}
+
+u64 prim_thread_45start(u64 t, u64 fun, u64 args)
+{
+    ASSERT_TAG(t, INT_TAG, "(thread-start t fun args); t is not an integer")
+    ASSERT_TAG(fun, CLO_TAG, "(thread-start t fun args); fun is not a function")
+    ASSERT_TAG(args, CONS_TAG, "(thread-start t fun args); args is not a list")
+
+    u64 *clo = DECODE_CLO(fun);
+    int index = DECODE_INT(t);
+
+    int result = pthread_create(&pool[index], NULL, perform_work, &index);
+
+    return ENCODE_INT(0);
+}
 
 ///// eq?, eqv?, equal?
 
