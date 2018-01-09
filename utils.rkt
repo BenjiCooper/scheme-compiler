@@ -216,13 +216,13 @@
 (define (make-string e)
   (match e
     [`(quote ,(? integer? e)) `(quote ,(number->string e))]
-    [`(quote ,(? char? e)) `(quote ,(string e))]
+    [`(quote ,(? char? e)) `(quote ,(string-append "#\\" (string e)))]
     [`(quote ,(? string? e)) `(quote ,e)]
     [(? string? e) `(quote ,e)]
     [(? symbol? e) `(quote ,(symbol->string e))]
     [`(quote ,(? list? e)) `(quote ,(list->str e))]
-    ['#t '"#t"]
-    ['#f '"#f"]))
+    [`(quote #t) '(quote "#t")]
+    [`(quote #f) '(quote "#f")]))
 
 (define (ir-exp? e [env (set)]) 
   (define (var? x) (symbol? x))
@@ -299,6 +299,8 @@
       
       [`(prim print ,e1 ,es ..1)
        `(prim print ,(T `(prim string-append ,@(map make-string (cons e1 es)))))]
+      [`(apply-prim print ,es)
+       `(print ,@es)]
 
       [`(prim println ,e1)
        (T `(prim print ,e1 '"\n"))]
@@ -743,12 +745,20 @@
      (string-append "(" (string-join (map list->str e)) ")")]
     [(? symbol? e)
      (symbol->string e)]
+    [`(quote ,(? integer? e))
+     `(quote ,(number->string e))]
     [(? integer? e)
      (number->string e)]
+    [`(quote ,(? string? e))
+     `(quote ,e)]
     [(? string? e)
      e]
+    [`(quote ,(? char? e))
+     `(quote ,(string e))]
     [(? char? e)
      (string e)]
+    ['#t '"#t"]
     [#t "#t"]
+    ['#f '"#f"]
     [#f "#f"]))
 

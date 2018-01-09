@@ -270,7 +270,7 @@ u64 prim_print_aux(u64 v)
     }
     else if ((v&7) == STR_TAG)
     {   // needs to handle escaping to be correct
-        printf("\"%s\"", DECODE_STR(v));
+        printf("%s", DECODE_STR(v));
     }
     else if ((v&7) == SYM_TAG)
     {   // needs to handle escaping to be correct
@@ -337,7 +337,7 @@ u64 prim_print(u64 v)
     }
     else if ((v&7) == STR_TAG)
     {   // needs to handle escaping to be correct
-        printf("\"%s\"", DECODE_STR(v));
+        printf("%s", DECODE_STR(v));
     }
     else if ((v&7) == SYM_TAG)
     {   // needs to handle escaping to be correct

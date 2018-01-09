@@ -265,13 +265,13 @@ V) Miscellaneous
 	- returns: causes the program to exit with code 0, and prints s
 	- example: (halt "we're done here") -> '() and "we're done here" (printed to stdout)
 
-	3) print
+	3) print (written partially by me)
 	- usage: (print s1 ss ...)
 	- args: 1 or more values
 	- returns: null, and prints every input value to stdout
 	- example: (print "CMSC" "430" " is awesome") -> "CMSC430 is awesome" to sdout
 
-	4) println
+	4) println (written be me)
 	- usage: (println s1 ss ...)
 	- args: 1 or more values
 	- returns: null, and prints every value to stdout, separated by newlines
@@ -288,6 +288,12 @@ V) Miscellaneous
 	- args: 1 char
 	- returns: the ascii value of c, the same as (char->integer) from racket
 	- example: (ascii #\c) -> 99
+
+	7) assert (written by me)
+	- usage: (assert e)
+	- args: 1 expression
+	- returns: true if e is true, else throws an error
+	- example: (assert (= 1 2)) -> library runtime error: Assertion failed! .... (= 1 2)
 
 
 

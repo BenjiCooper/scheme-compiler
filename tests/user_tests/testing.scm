@@ -1,0 +1,18 @@
+(define (fact n)
+  (define (T k a)
+    (if (= k 0)
+	a
+	(T (- k 1) (* a k))))
+  (T n 1))
+
+(define (fib n)
+  (if (< n 2)
+      n
+      (+ (fib (- n 1)) (fib (- n 2)))))
+
+(define (sum-list ls) (foldl + 0 ls))
+
+(tests
+ (test "factorial" 5040 (fact 7))
+ (test "fibonacci" 13 (fib 7))
+ (test "sum list" 15 (sum-list '(1 2 3 4 5))))

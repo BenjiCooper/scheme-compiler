@@ -5,6 +5,10 @@
 (provide desugar t-desugar)
 (require "utils.rkt")
 
+(define (test? ex)
+  (match ex
+    [`(test ,name ,body) #t]
+    [else #f]))
 
 (define (t-desugar e) 
   (match e
@@ -171,6 +175,9 @@
     [`(unless ,e0 ,e1)
      (t-desugar `(if (not,e0) ,e1 (void)))]
 
+    [`(assert ,e0)
+     (t-desugar `(if ,e0 '#t (throw (string-append '"Assertion failed! " '".... " ',(list->str e0)))))]
+
     ['promise? (t-desugar `(lambda (x) (promise? x)))]
     [(? prim? op) `(lambda args (apply-prim ,op args))]
     [(? symbol? x) x]
@@ -185,6 +192,15 @@
     [`(,(? prim? op) ,es ...)
      `(prim ,op . ,(map t-desugar es))]
 
+    [`(test ,name ,expected ,body)
+     (t-desugar `(if (eq? ,body ,expected) (print '"Test " ,name '" PASSED!\n") (print '"Test " ,name '" FAILED!\n")))]
+    
+    [`(tests ,e0) (t-desugar e0)]
+    [`(tests ,e0 . ,rest)
+     (t-desugar
+      `(let ([_t ,e0])
+         (tests . ,rest)))]
+    
     [`(,es ...)
      (map t-desugar es)]))
 
